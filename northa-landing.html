@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northa — Inteligência operacional para UAN e Hotelaria Offshore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#080c14;
+    --bg-1:#0c1420;
+    --bg-2:#101c2c;
+    --line:#1c2a3c;
+    --teal:#1fb3a3;
+    --teal-bright:#5fd9c9;
+    --text-0:#f2f0ea;
+    --text-1:#aab4c0;
+    --text-2:#6b7788;
+    --radius:2px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg-0);
+    color:var(--text-0);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--teal); color:var(--bg-0); }
+  a{color:inherit; text-decoration:none;}
+  .display{ font-family:'Fraunces', serif; }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  @media(max-width:640px){ .wrap{padding:0 20px;} }
+
+  /* ---------- NAV ---------- */
+  header.site{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(8,12,20,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 32px; max-width:1180px; margin:0 auto;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand svg{ width:26px; height:26px; }
+  .brand-text{ display:flex; flex-direction:column; line-height:1; }
+  .brand-name{ font-family:'Fraunces', serif; font-weight:600; font-size:19px; letter-spacing:0.01em; }
+  .brand-sub{ font-size:9px; color:var(--text-2); letter-spacing:0.08em; margin-top:3px; }
+  .brand-sub b{ color:var(--teal-bright); font-weight:600; }
+  .nav-cta{
+    font-size:13px; font-weight:600; padding:9px 18px;
+    border:1px solid var(--teal); color:var(--teal-bright);
+    border-radius:var(--radius);
+    transition: all .2s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:var(--teal); color:var(--bg-0); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:180px 0 120px;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% -10%, rgba(31,179,163,0.14), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-inner{
+    position:relative; z-index:2;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+  }
+  .compass-wrap{ width:92px; height:92px; margin-bottom:36px; position:relative; }
+  .compass-wrap svg{ width:100%; height:100%; }
+  .compass-ring{ animation: slow-spin 60s linear infinite; transform-origin:50% 50%; }
+  .compass-needle{ animation: settle 2.4s cubic-bezier(.2,1.4,.4,1) 1; transform-origin:50% 50%; }
+  @keyframes slow-spin{ to{ transform:rotate(360deg); } }
+  @keyframes settle{
+    0%{ transform:rotate(-140deg); opacity:0; }
+    60%{ opacity:1; }
+    100%{ transform:rotate(0deg); opacity:1; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .compass-ring, .compass-needle{ animation:none; }
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; letter-spacing:0.14em; text-transform:uppercase;
+    color:var(--teal-bright); margin-bottom:22px;
+  }
+  h1.hero-title{
+    font-size:clamp(34px, 5.4vw, 62px);
+    font-weight:600;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    max-width:820px;
+    margin-bottom:24px;
+  }
+  h1.hero-title em{ font-style:italic; color:var(--teal-bright); font-weight:500; }
+  .hero-sub{
+    font-size:18px; color:var(--text-1); max-width:560px; margin-bottom:44px; font-weight:400;
+  }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .btn{
+    font-size:14px; font-weight:600; padding:14px 26px;
+    border-radius:var(--radius); cursor:pointer; border:none;
+    transition:all .2s ease; font-family:'Inter',sans-serif;
+  }
+  .btn-primary{ background:var(--teal); color:var(--bg-0); }
+  .btn-primary:hover{ background:var(--teal-bright); }
+  .btn-ghost{ border:1px solid var(--line); color:var(--text-0); background:transparent; }
+  .btn-ghost:hover{ border-color:var(--teal); color:var(--teal-bright); }
+
+  .hero-note{ margin-top:22px; font-size:12.5px; color:var(--text-2); }
+  .hero-note b{ color:var(--text-1); }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding:96px 0; border-bottom:1px solid var(--line); }
+  .section-head{ max-width:640px; margin-bottom:56px; }
+  .section-kicker{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--teal-bright); margin-bottom:16px; display:flex; align-items:center; gap:10px;
+  }
+  .section-kicker::before{
+    content:''; width:22px; height:1px; background:var(--teal); display:inline-block;
+  }
+  h2.section-title{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px,3.4vw,38px);
+    line-height:1.16; letter-spacing:-0.01em;
+  }
+  .section-lead{ color:var(--text-1); font-size:16.5px; margin-top:16px; max-width:600px; }
+
+  /* ---------- PROBLEM / STATS ---------- */
+  .stat-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media(max-width:800px){ .stat-grid{ grid-template-columns:1fr; } }
+  .stat-card{ background:var(--bg-1); padding:36px 30px; }
+  .stat-num{ font-family:'Fraunces', serif; font-size:52px; font-weight:600; color:var(--teal-bright); line-height:1; }
+  .stat-label{ font-size:14px; color:var(--text-1); margin-top:14px; line-height:1.45; }
+  .stat-src{ font-size:11px; color:var(--text-2); margin-top:14px; font-family:'IBM Plex Mono',monospace; }
+
+  /* ---------- POSITIONING (head/machine) ---------- */
+  .position-grid{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+  @media(max-width:840px){ .position-grid{ grid-template-columns:1fr; gap:40px; } }
+  .stack-diagram{
+    border:1px solid var(--line); border-radius:6px; padding:6px; background:var(--bg-1);
+  }
+  .stack-layer{
+    padding:20px 22px; border-radius:4px; font-size:14px; display:flex; align-items:center; justify-content:space-between;
+  }
+  .stack-layer.head{
+    background:linear-gradient(135deg, var(--teal) 0%, #147a70 100%);
+    color:var(--bg-0); font-weight:600; margin-bottom:6px;
+  }
+  .stack-layer.machine{
+    background:var(--bg-2); color:var(--text-1); border:1px dashed var(--line); margin-bottom:6px;
+  }
+  .stack-layer.machine:last-child{ margin-bottom:0; }
+  .stack-tag{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; opacity:0.85; }
+
+  .position-copy p{ color:var(--text-1); font-size:15.5px; margin-bottom:18px; }
+  .position-copy strong{ color:var(--text-0); }
+
+  /* ---------- AUDIENCE TABS ---------- */
+  .aud-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); }
+  @media(max-width:760px){ .aud-grid{ grid-template-columns:1fr; } }
+  .aud-card{ background:var(--bg-1); padding:40px; }
+  .aud-icon{ width:38px; height:38px; margin-bottom:22px; color:var(--teal-bright); }
+  .aud-title{ font-family:'Fraunces', serif; font-weight:600; font-size:22px; margin-bottom:12px; }
+  .aud-list{ list-style:none; margin-top:20px; }
+  .aud-list li{
+    padding:9px 0; border-top:1px solid var(--line); color:var(--text-1); font-size:14px;
+    display:flex; gap:10px;
+  }
+  .aud-list li::before{ content:'→'; color:var(--teal); flex-shrink:0; }
+
+  /* ---------- PILLARS ---------- */
+  .pillar-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:28px; }
+  @media(max-width:900px){ .pillar-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:480px){ .pillar-grid{ grid-template-columns:1fr; } }
+  .pillar{ }
+  .pillar-mark{ color:var(--teal-bright); font-family:'IBM Plex Mono',monospace; font-size:12px; margin-bottom:10px; }
+  .pillar-name{ font-weight:600; font-size:15px; margin-bottom:8px; }
+  .pillar-desc{ font-size:13.5px; color:var(--text-2); line-height:1.5; }
+
+  /* ---------- BETA / FORM ---------- */
+  .beta-section{ background:var(--bg-1); }
+  .beta-inner{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:64px; align-items:flex-start; }
+  @media(max-width:860px){ .beta-inner{ grid-template-columns:1fr; gap:44px; } }
+  .beta-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--teal-bright);
+    border:1px solid var(--teal); padding:7px 14px; border-radius:100px; margin-bottom:24px;
+  }
+  .beta-badge .dot{ width:6px; height:6px; border-radius:50%; background:var(--teal-bright); animation:pulse 1.8s infinite; }
+  @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+
+  form.beta-form{ display:flex; flex-direction:column; gap:14px; }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+  label{ font-size:12.5px; color:var(--text-1); margin-bottom:6px; display:block; }
+  input, select{
+    width:100%; background:var(--bg-0); border:1px solid var(--line); color:var(--text-0);
+    padding:12px 14px; border-radius:var(--radius); font-size:14px; font-family:'Inter',sans-serif;
+  }
+  input:focus, select:focus{ outline:2px solid var(--teal); outline-offset:1px; border-color:var(--teal); }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238C97A6' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; }
+  .field-group{ display:flex; flex-direction:column; }
+  .beta-submit{ margin-top:8px; }
+  .form-foot{ font-size:12px; color:var(--text-2); margin-top:8px; }
+
+  .beta-confirm{
+    display:none; text-align:center; padding:48px 20px; border:1px dashed var(--teal); border-radius:6px;
+  }
+  .beta-confirm.show{ display:block; }
+  .beta-confirm h3{ font-family:'Fraunces',serif; font-size:22px; margin-bottom:10px; color:var(--teal-bright); }
+  .beta-confirm p{ color:var(--text-1); font-size:14.5px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ padding:56px 0 40px; }
+  .foot-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px; }
+  .foot-brand{ display:flex; align-items:center; gap:10px; }
+  .foot-brand svg{ width:20px; height:20px; }
+  .foot-links{ display:flex; gap:26px; font-size:13px; color:var(--text-2); }
+  .foot-links a:hover{ color:var(--teal-bright); }
+
+  .visually-hidden{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="nav-inner">
+    <div class="brand">
+      <svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="20" stroke="#5fd9c9" stroke-width="1.6" stroke-dasharray="3 4"/>
+        <path d="M24 6 L27 15 L24 12 L21 15 Z" fill="#5fd9c9"/>
+        <circle cx="24" cy="24" r="11" stroke="#f2f0ea" stroke-width="1.6"/>
+        <text x="24" y="29" text-anchor="middle" font-family="Fraunces, serif" font-size="14" font-weight="600" fill="#f2f0ea">N</text>
+      </svg>
+      <div class="brand-text">
+        <span class="brand-name">Northa</span>
+        <span class="brand-sub">POWERED BY <b>UANAI</b></span>
+      </div>
+    </div>
+    <a href="#beta" class="nav-cta">Entrar na lista</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div class="compass-wrap">
+        <svg viewBox="0 0 100 100" fill="none">
+          <g class="compass-ring">
+            <circle cx="50" cy="50" r="44" stroke="#1c2a3c" stroke-width="1.5" stroke-dasharray="4 6"/>
+          </g>
+          <g class="compass-needle">
+            <path d="M50 14 L56 46 L50 40 L44 46 Z" fill="#1fb3a3"/>
+            <path d="M50 86 L44 54 L50 60 L56 54 Z" fill="#2a3648"/>
+          </g>
+          <circle cx="50" cy="50" r="22" fill="#0c1420" stroke="#5fd9c9" stroke-width="1.5"/>
+          <text x="50" y="58" text-anchor="middle" font-family="Fraunces, serif" font-size="22" font-weight="600" fill="#f2f0ea">N</text>
+        </svg>
+      </div>
+
+      <div class="eyebrow">Inteligência operacional para UAN &amp; Hotelaria Offshore</div>
+
+      <h1 class="hero-title">Sua operação já sabe a resposta. <em>Ela só está espalhada.</em></h1>
+
+      <p class="hero-sub">
+        93,8% dos profissionais de UAN já assumiram uma operação sem conhecer seu histórico completo. 75% relatam que informações importantes ficam dispersas entre planilhas, documentos e conversas. A Northa está em fase de teste com um grupo limitado de operações para entender esse problema de perto — o beta foi desenhado para ser testado sem substituir os sistemas já utilizados pela operação.
+      </p>
+
+      <p style="color:var(--text-2); font-size:12.5px; margin-top:-28px; margin-bottom:8px;">// dados da pesquisa de campo Northa, 16 profissionais do setor</p>
+
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="document.getElementById('beta').scrollIntoView({behavior:'smooth'})">Quero testar o beta</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('waitlist-only').scrollIntoView({behavior:'smooth'})">Entrar na lista de espera</button>
+      </div>
+
+      <p class="hero-note">Vagas de beta limitadas a <b>10 operações</b> · onshore e offshore</p>
+    </div>
+  </section>
+
+  <!-- PROBLEM / VALIDATED DATA -->
+  <section id="problema">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">O problema, com dado real</div>
+        <h2 class="section-title">Você não está sozinho — sua operação está.</h2>
+        <p class="section-lead">Antes de construir qualquer linha da Northa, ouvimos nutricionistas e gestores de UAN em campo. O padrão se repetiu de forma quase unânime.</p>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-num">93,8%</div>
+          <div class="stat-label">já assumiram uma operação sem conhecer completamente o histórico dela.</div>
+          <div class="stat-src">// pesquisa de campo, 16 profissionais</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">75%</div>
+          <div class="stat-label">dizem que as informações da operação ficam dispersas entre planilhas, e-mails e conversas com frequência ou sempre.</div>
+          <div class="stat-src">// pesquisa de campo, 16 profissionais</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">69%</div>
+          <div class="stat-label">deram nota máxima (4 ou 5) ao impacto da perda de conhecimento quando um profissional sai da operação.</div>
+          <div class="stat-src">// pesquisa de campo, 16 profissionais</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POSITIONING: head vs machine -->
+  <section id="posicionamento">
+    <div class="wrap position-grid">
+      <div>
+        <div class="section-kicker">Como a Northa se encaixa</div>
+        <h2 class="section-title" style="margin-bottom:28px;">Uma hipótese sobre onde a Northa se encaixa.</h2>
+        <div class="stack-diagram">
+          <div class="stack-layer head">
+            <span>Northa — organiza o histórico da operação</span>
+            <span class="stack-tag">CAMADA DE ORGANIZAÇÃO</span>
+          </div>
+          <div class="stack-layer machine">
+            <span>Estoque · Ficha técnica · ERP</span>
+            <span class="stack-tag">JÁ EM USO</span>
+          </div>
+          <div class="stack-layer machine">
+            <span>Planilhas · Documentos · POPs</span>
+            <span class="stack-tag">JÁ EM USO</span>
+          </div>
+        </div>
+      </div>
+      <div class="position-copy">
+        <p>A área já tem sistemas bons para controlar estoque, ficha técnica e indicadores. 93,8% dos profissionais que responderam nossa pesquisa já assumiram uma operação sem conhecer seu histórico completo. A partir disso, entendemos que o problema pode não ser a ausência de ferramentas, mas <strong>a ausência de um registro contínuo do raciocínio por trás das decisões.</strong></p>
+        <p>O H1 foi concebido para coexistir com os sistemas já utilizados pela operação, e não para substituí-los — organizando, ao longo do tempo, o histórico de decisões, problemas e resultados registrados.</p>
+        <p>Estamos testando essa hipótese com um grupo limitado de operações antes de expandir. <strong>Northa existe para que esse histórico não dependa só de quem está na operação hoje.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE -->
+  <section id="publico">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-kicker">Feita para quem opera de verdade</div>
+        <h2 class="section-title">Onshore ou embarcado, o problema é o mesmo.</h2>
+      </div>
+      <div class="aud-grid">
+        <div class="aud-card">
+          <svg class="aud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>
+          <div class="aud-title">UAN Onshore</div>
+          <p style="color:var(--text-1); font-size:14.5px;">Hospitalar, industrial, escolar e restaurante corporativo — operações fixas com rotatividade de equipe e cobrança constante de auditoria.</p>
+          <ul class="aud-list">
+            <li>Coordenadores e gestores de operação</li>
+            <li>Nutricionistas responsáveis técnicos</li>
+            <li>Consultores de qualidade e segurança alimentar</li>
+          </ul>
+        </div>
+        <div class="aud-card">
+          <svg class="aud-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 20h20M4 20l1.5-9h13L20 20M7 11V7a2 2 0 012-2h6a2 2 0 012 2v4"/></svg>
+          <div class="aud-title">Offshore &amp; Hotelaria Embarcada</div>
+          <p style="color:var(--text-1); font-size:14.5px;">Plataformas, embarcações e resorts — operações isoladas, escala 14x14 ou 28x28, onde perder o histórico custa caro e rápido.</p>
+          <ul class="aud-list">
+            <li>Nutricionistas e catering managers embarcados</li>
+            <li>Gerentes operacionais de hotelaria offshore</li>
+            <li>Equipes em regime de rodízio de escala</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILARES: seção removida nesta versão da página (fase de recrutamento).
+       Conteúdo original descrevia benefícios/sensações prometidas (clareza, confiança,
+       eficiência) que constituem hipóteses em aberto (Registro Oficial de Hipóteses,
+       Hipóteses 1 e 2). Reservada para reintrodução na Camada B (Arquitetura de
+       Validação Comercial v0.1), após entrevistas de profundidade confirmarem, com
+       dado real, quais sensações os usuários de fato relatam. -->
+
+
+  <!-- BETA + WAITLIST -->
+  <section class="beta-section" id="beta">
+    <div class="wrap beta-inner">
+      <div>
+        <div class="beta-badge"><span class="dot"></span> 10 vagas de beta abertas</div>
+        <h2 class="section-title" style="margin-bottom:16px;">Teste antes de todo mundo.</h2>
+        <p style="color:var(--text-1); font-size:15.5px; margin-bottom:20px;">
+          As primeiras 10 operações selecionadas usam a Northa gratuitamente durante o período de teste e ajudam a moldar o produto direto com quem está construindo.
+        </p>
+        <p id="waitlist-only" style="color:var(--text-2); font-size:13.5px;">
+          Não conseguiu uma vaga de beta ou prefere só acompanhar o lançamento? O mesmo formulário te coloca na lista de espera.
+        </p>
+      </div>
+
+      <div>
+        <form class="beta-form" id="betaForm">
+          <div class="form-row">
+            <div class="field-group">
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" required placeholder="Seu nome">
+            </div>
+            <div class="field-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" required placeholder="voce@email.com">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field-group">
+              <label for="funcao">Função atual</label>
+              <select id="funcao" required>
+                <option value="">Selecione</option>
+                <option>Nutricionista</option>
+                <option>Coordenador(a) de UAN</option>
+                <option>Supervisor(a)</option>
+                <option>Gerente operacional</option>
+                <option>Catering manager</option>
+                <option>Consultor(a)</option>
+                <option>Outro</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="segmento">Segmento</label>
+              <select id="segmento" required>
+                <option value="">Selecione</option>
+                <option>Offshore</option>
+                <option>Industrial</option>
+                <option>Hospitalar</option>
+                <option>Escolar</option>
+                <option>Restaurante corporativo</option>
+                <option>Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="interesse">O que mais atrapalha seu trabalho hoje?</label>
+            <input type="text" id="interesse" placeholder="Responda com suas palavras (opcional)">
+          </div>
+          <button type="submit" class="btn btn-primary beta-submit">Quero minha vaga / entrar na lista</button>
+          <p class="form-foot">Sem spam. Você recebe no máximo 1 e-mail por etapa do lançamento.</p>
+        </form>
+
+        <div class="beta-confirm" id="betaConfirm">
+          <h3>Recebemos seu cadastro.</h3>
+          <p>Em breve você recebe um e-mail da Northa com os próximos passos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div class="foot-brand">
+      <svg viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="20" stroke="#1c2a3c" stroke-width="1.6"/>
+        <path d="M24 8 L27 16 L24 13 L21 16 Z" fill="#5fd9c9"/>
+        <circle cx="24" cy="24" r="10" stroke="#6b7788" stroke-width="1.4"/>
+        <text x="24" y="28.5" text-anchor="middle" font-family="Fraunces, serif" font-size="12" font-weight="600" fill="#aab4c0">N</text>
+      </svg>
+      <span style="font-family:'Fraunces',serif; font-size:15px; color:var(--text-1);">Northa <span style="color:var(--text-2); font-size:11px;">· powered by UANAI</span></span>
+    </div>
+    <div class="foot-links">
+      <a href="mailto:contato@northa.com.br">contato@northa.com.br</a>
+      <a href="#problema">O problema</a>
+      <a href="#beta">Beta</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('betaForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    // Front-end only: sem backend conectado ainda.
+    // Para captar de verdade, integrar com um serviço de formulário (ex: Formspree, Google Forms, ou backend próprio).
+    this.style.display = 'none';
+    document.getElementById('betaConfirm').classList.add('show');
+  });
+</script>
+
+</body>
+</html>
